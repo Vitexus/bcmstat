@@ -56,11 +56,11 @@ LIMIT_TEMP = True
 COLOUR = False
 SYSINFO = {}
 
-DEFAULT_COLS_FILTER = ["UFT", "Vcore", "ARM", "Core", "H264", "TempCore", "TempPMIC", "IRQ", "RX", "TX",
+DEFAULT_COLS_FILTER = ["UFT", "Vcore", "ARM", "Core", "H264", "HEVC", "TempCore", "TempPMIC", "IRQ", "RX", "TX",
                        "CPU", "CPUuser", "CPUnice", "CPUsys", "CPUidle", "CPUiowt", "CPUirq", "CPUs/irq", "CPUtotal",
                        "GPUfree", "MEMfree", "MEMdelta", "MEMaccum"]
 
-EXTRA_COLS_FILTER = ["V3D", "ISP"]
+EXTRA_COLS_FILTER = ["V3D", "ISP", "HEVC"]
 
 # [USER:8][NEW:1][MEMSIZE:3][MANUFACTURER:4][PROCESSOR:4][TYPE:8][REV:4]
 # NEW          23: will be 1 for the new scheme, 0 for the old scheme
@@ -616,6 +616,7 @@ def getBCM283X(storage, filter, STATS_WITH_VOLTS, STATS_WITH_PMIC_TEMP):
   farm = int(vcgencmd("measure_clock arm")) + 500000 if "ARM" in filter else 0
   fcore = int(vcgencmd("measure_clock core")) + 500000 if "Core" in filter else 0
   fh264 = int(vcgencmd("measure_clock h264")) + 500000 if "H264" in filter else 0
+  fhevc = int(vcgencmd("measure_clock hevc")) + 500000 if "HEVC" in filter else 0
   fv3d = int(vcgencmd("measure_clock v3d")) + 500000 if "V3D" in filter else 0
   fisp = int(vcgencmd("measure_clock isp")) + 500000 if "ISP" in filter else 0
 
@@ -624,6 +625,7 @@ def getBCM283X(storage, filter, STATS_WITH_VOLTS, STATS_WITH_PMIC_TEMP):
                 [farm,
                  fcore,
                  fh264,
+                 fhevc,
                  fv3d,
                  fisp,
                  tCore, TCMAX,
@@ -773,12 +775,14 @@ def getsysinfo(HARDWARE):
 
   CORE_DEFAULT_IDLE = CORE_DEFAULT_BUSY = 250
   H264_DEFAULT_IDLE = H264_DEFAULT_BUSY = 250
+  HEVC_DEFAULT_IDLE = HEVC_DEFAULT_BUSY = 250
   V3D_DEFAULT_IDLE = V3D_DEFAULT_BUSY = 250
   ISP_DEFAULT_IDLE = ISP_DEFAULT_BUSY = 250
 
   if VCG_INT.get("disable_auto_turbo", 0) == 0:
     CORE_DEFAULT_BUSY += 50
     H264_DEFAULT_BUSY += 50
+    HEVC_DEFAULT_BUSY += 50
 
   if RPI_MODEL == "RPi1":
     ARM_DEFAULT_IDLE = 700
@@ -814,6 +818,7 @@ def getsysinfo(HARDWARE):
 
   sysinfo["core_max"]   = VCG_INT.get("core_freq", VCG_INT.get("gpu_freq", CORE_DEFAULT_BUSY))
   sysinfo["h264_max"]   = VCG_INT.get("h264_freq", VCG_INT.get("gpu_freq", H264_DEFAULT_BUSY))
+  sysinfo["hevc_max"]   = VCG_INT.get("hevc_freq", VCG_INT.get("gpu_freq", HEVC_DEFAULT_BUSY))
   sysinfo["v3d_max"]   = VCG_INT.get("v3d_freq", VCG_INT.get("gpu_freq", V3D_DEFAULT_BUSY))
   sysinfo["isp_max"]   = VCG_INT.get("isp_freq", VCG_INT.get("gpu_freq", ISP_DEFAULT_BUSY))
   sysinfo["sdram_max"]  = VCG_INT.get("sdram_freq", SDRAM_DEFAULT)
@@ -825,20 +830,24 @@ def getsysinfo(HARDWARE):
   if sysinfo["force_turbo"]:
     core_min = sysinfo["core_max"]
     h264_min = sysinfo["h264_max"]
+    hevc_min = sysinfo["hevc_max"]
     v3d_min = sysinfo["v3d_max"]
     isp_min = sysinfo["isp_max"]
   else:
     core_min = CORE_DEFAULT_IDLE
     h264_min = H264_DEFAULT_IDLE
+    hevc_min = HEVC_DEFAULT_IDLE
     v3d_min = V3D_DEFAULT_IDLE
     isp_min = ISP_DEFAULT_IDLE
     core_min = sysinfo["core_max"] if sysinfo["core_max"] < core_min else core_min
     h264_min = sysinfo["h264_max"] if sysinfo["h264_max"] < h264_min else h264_min
+    hevc_min = sysinfo["hevc_max"] if sysinfo["hevc_max"] < hevc_min else hevc_min
     v3d_min = sysinfo["v3d_max"] if sysinfo["v3d_max"] < v3d_min else v3d_min
     isp_min = sysinfo["isp_max"] if sysinfo["isp_max"] < isp_min else isp_min
 
   sysinfo["core_min"] = core_min
   sysinfo["h264_min"] = h264_min
+  sysinfo["hevc_min"] = hevc_min
   sysinfo["v3d_min"] = v3d_min
   sysinfo["isp_min"] = isp_min
 
@@ -852,6 +861,9 @@ def getsysinfo(HARDWARE):
   h264_min = sysinfo["h264_min"] - 10
   h264_max = sysinfo["h264_max"] - 5 if sysinfo["h264_max"] > H264_DEFAULT_IDLE else 1e6
 
+  hevc_min = sysinfo["hevc_min"] - 10
+  hevc_max = sysinfo["hevc_max"] - 5 if sysinfo["hevc_max"] > HEVC_DEFAULT_IDLE else 1e6
+
   v3d_min = sysinfo["v3d_min"] - 10
   v3d_max = sysinfo["v3d_max"] - 5 if sysinfo["v3d_max"] > V3D_DEFAULT_IDLE else 1e6
 
@@ -862,6 +874,7 @@ def getsysinfo(HARDWARE):
   limits["arm"] = (arm_min, arm_max)
   limits["core"] = (core_min, core_max)
   limits["h264"] = (h264_min, h264_max)
+  limits["hevc"] = (hevc_min, hevc_max)
   limits["v3d"] = (v3d_min, v3d_max)
   limits["isp"] = (isp_min, isp_max)
   sysinfo["limits"] = limits
@@ -887,6 +900,7 @@ def ShowConfig(nice_value, priority_desc, sysinfo, args):
   CORE_MIN   = sysinfo["core_min"]
   CORE_MAX   = sysinfo["core_max"]
   H264_MAX   = sysinfo["h264_max"]
+  HEVC_MAX   = sysinfo["hevc_max"]
   SDRAM_MAX  = sysinfo["sdram_max"]
   ARM_VOLT   = sysinfo["arm_volt"]
   SDRAM_VOLT = sysinfo["sdram_volt"]
@@ -979,6 +993,7 @@ def ShowHeadings(filter, display_flags, sysinfo):
   (HDR1, HDR2) = addHeadingValue(filter, "ARM",              "    ARM", HDR1, HDR2)
   (HDR1, HDR2) = addHeadingValue(filter, "Core",             "   Core", HDR1, HDR2)
   (HDR1, HDR2) = addHeadingValue(filter, "H264",             "   H264", HDR1, HDR2)
+  (HDR1, HDR2) = addHeadingValue(filter, "HEVC",             "   HEVC", HDR1, HDR2)
   (HDR1, HDR2) = addHeadingValue(filter, "V3D",              "    V3D", HDR1, HDR2)
   (HDR1, HDR2) = addHeadingValue(filter, "ISP",              "    ISP", HDR1, HDR2)
   (HDR1, HDR2) = addHeadingValue(filter, "TempCore", "Core Temp (Max)", HDR1, HDR2)
@@ -1088,6 +1103,7 @@ def ShowStats(filter, display_flags, sysinfo, threshold, bcm2385, irq, network, 
   (arm_min, arm_max) = limits["arm"]
   (core_min, core_max) = limits["core"]
   (h264_min, h264_max) = limits["h264"]
+  (hevc_min, hevc_max) = limits["hevc"]
   (v3d_min, v3d_max) = limits["v3d"]
   (isp_min, isp_max) = limits["isp"]
 
@@ -1100,8 +1116,9 @@ def ShowStats(filter, display_flags, sysinfo, threshold, bcm2385, irq, network, 
   LINE = addDetailValue(filter, "ARM",  colourise(bcm2385[0]/1000000, "%4dMhz", arm_min,     None,  arm_max, False), LINE)
   LINE = addDetailValue(filter, "Core", colourise(bcm2385[1]/1000000, "%4dMhz",core_min,     None, core_max, False), LINE)
   LINE = addDetailValue(filter, "H264", colourise(bcm2385[2]/1000000, "%4dMhz",       0, h264_min, h264_max, False), LINE)
-  LINE = addDetailValue(filter, "V3D",  colourise(bcm2385[3]/1000000, "%4dMhz",       0,  v3d_min,  v3d_max, False), LINE)
-  LINE = addDetailValue(filter, "ISP",  colourise(bcm2385[4]/1000000, "%4dMhz",       0,  isp_min,  isp_max, False), LINE)
+  LINE = addDetailValue(filter, "HEVC", colourise(bcm2385[3]/1000000, "%4dMhz",       0, hevc_min, hevc_max, False), LINE)
+  LINE = addDetailValue(filter, "V3D",  colourise(bcm2385[4]/1000000, "%4dMhz",       0,  v3d_min,  v3d_max, False), LINE)
+  LINE = addDetailValue(filter, "ISP",  colourise(bcm2385[5]/1000000, "%4dMhz",       0,  isp_min,  isp_max, False), LINE)
 
   if "TempCore" in filter:
     LINE = addDetailValue(filter, "TempCore", colourise(bcm2385[5]/1000,    fTC,         50.0,     70.0,     80.0, False), LINE)
