@@ -64,10 +64,10 @@ EXTRA_COLS_FILTER = ["V3D", "ISP", "HEVC"]
 
 # [USER:8][NEW:1][MEMSIZE:3][MANUFACTURER:4][PROCESSOR:4][TYPE:8][REV:4]
 # NEW          23: will be 1 for the new scheme, 0 for the old scheme
-# MEMSIZE      20: 0=256M 1=512M 2=1G
-# MANUFACTURER 16: 0=SONY 1=EGOMAN 2=EMBEST 3=SONY JAPAN 4=EMBEST
-# PROCESSOR    12: 0=2835 1=2836 2=2837, 3=2838
-# TYPE         04: 0=MODELA 1=MODELB 2=MODELA+ 3=MODELB+ 4=Pi2 MODELB 5=ALPHA 6=CM 8=Pi3 9=Pi0 10=CM3 12=Pi0W
+# MEMSIZE      20: 0=256M 1=512M 2=1G 3=2G 4=4G 5=8G 
+# MANUFACTURER 16: 0=SONY 1=EGOMAN 2=EMBEST 3=SONY JAPAN 4=EMBEST 5=STADIUM
+# PROCESSOR    12: 0=2835 1=2836 2=2837 3=2711
+# TYPE         04: 0=MODELA 1=MODELB 2=MODELA+ 3=MODELB+ 4=Pi2 MODELB 5=ALPHA 6=CM 8=Pi3 9=Pi0 10=CM3 11=Pi4 12=Pi02W 13=400 14=CM4 15=CM4S
 # REV          00: 0=REV0 1=REV1 2=REV2 3=REV3
 
 #0  Unknown
@@ -93,7 +93,7 @@ class RPIHardware():
     self.memsizes = ["256MB", "512MB", "1GB", "2GB", "4GB", "8GB"]
     self.manufacturers = ["Sony UK", "Egoman", "Embest", "Sony Japan", "Embest", "Stadium"]
     self.processors = ["2835", "2836", "2837", "2838", "2839", "2840"]
-    self.models = ["Model A", "Model B", "Model A+", "Model B+", "Pi2 Model B", "Alpha", "CM1", "Unknown", "Pi3", "Pi0", "CM3", "Unknown", "Pi0 W", "Pi3 Model B+", "Pi3 Model A+", "Unknown", "CM3+", "Pi4 Model B"]
+    self.models = ["Model A", "Model B", "Model A+", "Model B+", "Pi2 Model B", "Alpha", "CM1", "Unknown", "Pi3", "PiZero", "CM3", "Unknown", "Pi Zero W", "Pi3 Model B+", "Pi3 Model A+", "Unknown", "CM3+", "Pi4 Model B", "Pi Zero 2 W", "Pi400", "CM4", "CM4S"]
     self.pcbs = ["Unknown", "Pi3 Rev1.0", "Pi3 Rev1.2", "Pi2 2837 Rev1.1", "Pi2 2836", "Pi1 B+ Rev 1.1", "Pi0", "Pi1 B Rev2.0", "Pi2 (2837) Rev1.0", "Pi0 W", "Pi2 (2837) Rev1.2", "Pi3 B+"]
 
     self.set_rev_code(rev_code)
