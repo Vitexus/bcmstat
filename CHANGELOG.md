@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 0.5.7 (4/06/2023)
+## Version 0.5.7 (04/06/2023)
 * Add: Support for new RPi hardware (Pi400, Pi Zero 2 W, ...) by GC2
 * Add: Add support for HEVC clock on 2711 by timg236
 
