@@ -30,13 +30,13 @@ xgd10
 
 To install the latest version directly from this github repository:
 ```
-curl -Ls https://raw.githubusercontent.com/MilhouseVH/bcmstat/master/bcmstat.sh -o ~/bcmstat.sh
-chmod +x ~/bcmstat.sh
+curl -Ls https://raw.githubusercontent.com/GrazerComputerClub/bcmstat/master/bcmstat -o ~/bcmstat
+chmod +x ~/bcmstat
 ```
 
 ######Example output:
 ```
-rpi2:~ # ./bcmstat.sh xgpd10
+rpi2:~ # ./bcmstat xgpd10
   Config: v0.3.7, args "Cxgpd10", priority lowest (+19)
    Board: 4 x ARMv7 cores available, ondemand governor (Pi3 rev 1.2, BCM2837 SoC with 1GB RAM by Sony)
   Memory: 1008MB (split 688MB ARM, 320MB GPU)
@@ -70,7 +70,7 @@ Time         ARM    Core    H264 Core Temp (Max)  IRQ/s     RX B/s     TX B/s  %
 
 Notice how negative allocations exceed the positive frees.
 ```
-rpi2:~ # ./bcmstat.sh Dd10
+rpi2:~ # ./bcmstat Dd10
   Config: v0.3.4, args "Dd10", priority lowest (+19)
      CPU: 4 x ARMv7 cores available, using ondemand governor
   Memory: 1008MB (split 688MB ARM, 320MB GPU)
