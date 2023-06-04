@@ -23,7 +23,7 @@
 #
 # Usage:
 #
-#   ./bcmstat.py xcd10
+#   ./bcmstat xcd10
 #
 # Help available with -h.
 #
@@ -42,8 +42,10 @@ if sys.version_info >= (3, 0):
 else:
   import urllib2
 
-GITHUB = "https://raw.github.com/MilhouseVH/bcmstat/master"
-VERSION = "0.5.5"
+GITHUB = "https://github.com/MilhouseVH/bcmstat"
+GITHUBFORK1 = "https://github.com/timg236/bcmstat"
+GITHUBFORK2 = "https://github.com/GrazerComputerClub/bcmstat"
+VERSION = "0.5.7"
 
 VCGENCMD = None
 VCDBGCMD = None
