@@ -1121,14 +1121,14 @@ def ShowStats(filter, display_flags, sysinfo, threshold, bcm2385, irq, network, 
   LINE = addDetailValue(filter, "ISP",  colourise(bcm2385[5]/1000000, "%4dMhz",       0,  isp_min,  isp_max, False), LINE)
 
   if "TempCore" in filter:
-    LINE = addDetailValue(filter, "TempCore", colourise(bcm2385[5]/1000,    fTC,         50.0,     70.0,     80.0, False), LINE)
-    LINE = addDetailValue(filter, "TempCore", colourise(bcm2385[6]/1000,    fTM,         50.0,     70.0,     80.0, False), LINE, prefix='(', suffix=')')
+    LINE = addDetailValue(filter, "TempCore", colourise(bcm2385[6]/1000,    fTC,         50.0,     70.0,     80.0, False), LINE)
+    LINE = addDetailValue(filter, "TempCore", colourise(bcm2385[7]/1000,    fTM,         50.0,     70.0,     80.0, False), LINE, prefix='(', suffix=')')
 
   if display_flags["temp_pmic"] and "TempPMIC" in filter:
     fTC = "%5.2fC" if bcm2385[7] < 100000 else "%5.1fC"
     fTM = "%5.2fC" if bcm2385[8] < 100000 else "%5.1fC"
-    LINE = addDetailValue(filter, "TempPMIC", colourise(bcm2385[7], fTC, 50.0, 70.0, 80.0, False), LINE)
-    LINE = addDetailValue(filter, "TempPMIC", colourise(bcm2385[8], fTM, 50.0, 70.0, 80.0, False), LINE, prefix='(', suffix=')')
+    LINE = addDetailValue(filter, "TempPMIC", colourise(bcm2385[8], fTC, 50.0, 70.0, 80.0, False), LINE)
+    LINE = addDetailValue(filter, "TempPMIC", colourise(bcm2385[9], fTM, 50.0, 70.0, 80.0, False), LINE, prefix='(', suffix=')')
 
   LINE = addDetailValue(filter, "IRQ", colourise(irq[0], "%6s", 500, 2500, 5000, True), LINE)
 
