@@ -4,6 +4,7 @@
 ################################################################################
 #
 #  Copyright (C) 2014 Neil MacLeod (bcmstat.sh@nmacleod.com)
+#   and GC2
 #
 #  This Program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -1313,7 +1314,7 @@ def downloadLatestVersion(args, autoupdate=False, forceupdate=False):
     return
 
   try:
-    response = urllib2.urlopen("%s/%s" % (GITHUB, "bcmstat.sh"))
+    response = urllib2.urlopen("%s/%s" % (GITHUB, "bcmstat"))
     data = response.read()
   except Exception as e:
     if autoupdate: return False
@@ -1359,6 +1360,7 @@ def get_latest_version():
 def get_latest_version_ex(url, headers=None, checkerror=True):
   GLOBAL_TIMEOUT = socket.getdefaulttimeout()
   ITEMS = (None, None)
+  url = url.replace("github.com","raw.githubusercontent.com").replace("/bcmstat","/bcmstat/master")
 
   try:
     socket.setdefaulttimeout(5.0)
