@@ -46,7 +46,7 @@ else:
 GITHUB = "https://github.com/GrazerComputerClub/bcmstat"
 #Original project: https://github.com/MilhouseVH/bcmstat
 #Additional fork:  https://github.com/timg236/bcmstat
-VERSION = "0.5.7"
+VERSION = "0.5.8"
 
 VCGENCMD = None
 VCDBGCMD = None
