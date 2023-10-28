@@ -32,6 +32,7 @@ To install the latest version directly from this github repository:
 ```
 curl -Ls https://raw.githubusercontent.com/GrazerComputerClub/bcmstat/master/bcmstat -o ~/bcmstat
 chmod +x ~/bcmstat
+sudo mv bcmstat /usr/local/bin 
 ```
 
 ######Example output:
