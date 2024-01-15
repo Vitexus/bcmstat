@@ -1,5 +1,4 @@
-bcmstat
-=======
+# bcmstat
 
 Simple Raspberry Pi command line monitoring tool:
 
@@ -25,19 +24,26 @@ Specify a default configuration in ~/.bcmstat.conf, eg:
 ```
 xgd10
 ```
+## Testet
 
-####Installing on the Pi:
+up to Raspberrry Pi 5
+ 
+
+## Installing on the Pi:
 
 To install the latest version directly from this github repository:
 ```
-curl -Ls https://raw.githubusercontent.com/GrazerComputerClub/bcmstat/master/bcmstat -o ~/bcmstat
-chmod +x ~/bcmstat
+cd ~
+curl -Ls https://raw.githubusercontent.com/GrazerComputerClub/bcmstat/master/bcmstat -o bcmstat
+chmod +x bcmstat
 sudo mv bcmstat /usr/local/bin 
 ```
 
-######Example output:
+## Example output:
+
+### Raspberry Pi 3:
 ```
-rpi2:~ # ./bcmstat xgpd10
+rpi:~ # bcmstat xgpd10
   Config: v0.3.7, args "Cxgpd10", priority lowest (+19)
    Board: 4 x ARMv7 cores available, ondemand governor (Pi3 rev 1.2, BCM2837 SoC with 1GB RAM by Sony)
   Memory: 1008MB (split 688MB ARM, 320MB GPU)
@@ -67,11 +73,11 @@ Time         ARM    Core    H264 Core Temp (Max)  IRQ/s     RX B/s     TX B/s  %
 11:00:30  999Mhz  500Mhz    0Mhz 48.69C (49.77C)    694        456        774   4.77   0.74   1.69  92.20   0.00   0.00   0.02   7.80   9.24   1.79   3.08  17.18 242M ( 80%) 588,504 kB/14.8%
 ```
 
-###### With "leak detection" showing potential GPU and ARM memory leak:
+### With "leak detection" showing potential GPU and ARM memory leak:
 
 Notice how negative allocations exceed the positive frees.
 ```
-rpi2:~ # ./bcmstat Dd10
+rpi:~ # bcmstat Dd10
   Config: v0.3.4, args "Dd10", priority lowest (+19)
      CPU: 4 x ARMv7 cores available, using ondemand governor
   Memory: 1008MB (split 688MB ARM, 320MB GPU)
@@ -108,3 +114,31 @@ Time         ARM    Core    H264 Core Temp (Max)  IRQ/s     RX B/s     TX B/s GP
 11:04:30 1000Mhz  500Mhz    0Mhz 47.08C (50.31C)    697      1,348        786 227M ( 75%) 575,952 kB/16.6%           0        -532
 11:04:40 1000Mhz  500Mhz    0Mhz 47.08C (50.31C)    701      1,331        879 227M ( 75%) 576,600 kB/16.5%           0        +648
 ```
+
+### Raspberry Pi 5 (2024)
+
+```
+rpi:~ # bcmstat
+  Config: v0.5.8, args "", priority lowest (+19)
+   Board: 4 x  cores available, ondemand governor (Pi5 rev 1.0, BCM2712 SoC with 4GB RAM by Sony UK)
+  Memory: 1024MB (split 1020MB ARM, 4MB GPU) plus 100MB Swap
+HW Block: |   ARM   |  Core  |  H264  |    SDRAM    |
+Min Freq: | 1000MHz | 250MHz |   0MHz |      0MHz   |
+Max Freq: | 2400MHz | 910MHz | 300MHz |      0MHz   |
+Voltages: |         0, 0.8629V        | +0, 1.2000V |
+   Other: temp_limit=85
+Firmware: 2023/10/30 16:45:10, version 30de0ba5 (release) (embedded)
+  Codecs: none
+  Booted: Mon Jan 15 13:08:26 2024
+
+Time         ARM    Core    H264    HEVC Core Temp (Max)  IRQ/s      RX B/s      TX B/s
+======== ======= ======= ======= ======= =============== ====== =========== ===========
+15:19:52 2400Mhz  910Mhz    0Mhz  910Mhz  52.4C (52.35C)  1,914       1,422       7,821
+15:19:54 2400Mhz  910Mhz    0Mhz  910Mhz  53.5C (53.45C)     99          25         132
+15:19:56 2400Mhz  910Mhz    0Mhz  910Mhz  53.5C (53.45C)     65          25         128
+15:19:58 1500Mhz  500Mhz    0Mhz  500Mhz  53.5C (53.45C)     79          25         128
+15:20:00 1500Mhz  500Mhz    0Mhz  500Mhz  51.8C (53.45C)     99          25         128
+15:20:02 1500Mhz  500Mhz    0Mhz  500Mhz  52.9C (53.45C)     72          25         128
+15:20:04 1500Mhz  500Mhz    0Mhz  500Mhz  52.4C (53.45C)     66          25         128
+```
+
