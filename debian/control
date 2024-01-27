@@ -1,0 +1,27 @@
+Source: bcmstat
+Section: unknown
+Priority: optional
+Maintainer: Vítězslav Dvořák <info@vitexsoftware.cz>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.5.1
+Homepage: https://github.com/GrazerComputerClub/bcmstat/
+Rules-Requires-Root: no
+Vcs-Git: https://github.com/Vitexus/bcmstat.git
+Vcs-Browser: https://github.com/Vitexus/bcmstat
+
+Package: bcmstat
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Simple Raspberry Pi monitoring tool 
+ CPU fequencies (ARM, Core, H264, V3D, ISP)
+ Temperature (current and peak) for Core and/or PMIC
+ IRQ/s
+ Network Rx/Tx
+ System utilisation (percentage user, nice, idle etc.)
+ CPU load (including individual cores when available)
+ GPU mem usage
+ RAM usage (with/without swap)
+ Memory leak detection (D/A options - instantaneous and accumulated memory deltas)
+ Undervoltage, ARM frequency cap and temperature throttle event monitoring
+ Customisable columns
